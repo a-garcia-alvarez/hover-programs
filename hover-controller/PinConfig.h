@@ -1,7 +1,7 @@
 #ifndef __PIN_CONFIG_H__
 #define __PIN_CONFIG_H__
 
-#define RF_CE_PIN RPI_V2_GPIO_P1_15
+#define RF_CE_PIN RPI_V2_GPIO_P1_22
 
 #define SERVO_MAX 2400 //2300
 #define SERVO_MIN 500
