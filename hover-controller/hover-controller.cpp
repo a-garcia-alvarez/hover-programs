@@ -139,7 +139,9 @@ int main(int argc, char** argv) {
         radio.startListening();
         #endif
 
-
+        //clean buffer
+        //buffer[0]='\0';
+        //memset(buffer, 0, sizeof(buffer));
 
     }while(loop_on);
     

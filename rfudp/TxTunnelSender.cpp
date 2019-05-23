@@ -154,6 +154,10 @@ int main(int argc, char** argv){
             inet_ntoa(cliaddr.sin_addr),    // addrress
             ntohs(cliaddr.sin_port)         // port
         );
+        if ( n ==0 ) {
+            printf("empty msg, discarded\n");
+            continue;
+        }
         printf("MSG: \'%s\'\n", buffer);
 
 
@@ -202,6 +206,10 @@ int main(int argc, char** argv){
             sockfd, (char *) buffer, strlen(buffer), MSG_CONFIRM,
              (const struct sockaddr *) &cliaddr, cliaddr_len
         );
+
+        //clean buffer
+        //buffer[0]='\0';
+        //memset(buffer, 0, sizeof(buffer));
 
     }while(loop_on);
     

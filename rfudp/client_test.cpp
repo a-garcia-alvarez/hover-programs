@@ -63,5 +63,6 @@ do{
 
   buffer[n] = '\0';
   printf("ANS: \'%s\'\n", buffer);
+  //buffer[0]='\0';
 }while(loop_on);
 }
