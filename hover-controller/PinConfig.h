@@ -1,0 +1,25 @@
+#ifndef __PIN_CONFIG_H__
+#define __PIN_CONFIG_H__
+
+#define RF_CE_PIN RPI_V2_GPIO_P1_15
+
+#define SERVO_MAX 2400 //2300
+#define SERVO_MIN 500
+
+#define LEFT_RUDDER_GPIO 23
+#define LEFT_RUDDER_MAX SERVO_MAX
+#define LEFT_RUDDER_MIN SERVO_MIN
+
+#define RIGHT_RUDDER_GPIO 24
+#define RIGHT_RUDDER_MAX SERVO_MAX
+#define RIGHT_RUDDER_MIN SERVO_MIN
+
+
+#define ESC_MAX
+#define ESC_MIN
+#define ESC_REVERSE
+
+#define RIGHT_PROP_GPIO
+#define LEFT_PROP_GPIO
+
+#endif // __PIN_CONFIG_H__

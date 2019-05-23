@@ -17,21 +17,42 @@ RF_LIB=rf24
 RF_LIB_DIR=/usr/local/lib
 RF_HEADER_DIR=/usr/local/include/RF24
 
+GPIO_LIB=pigpio
+
 # define all programs
 PROGRAMS =  hover-controller
 SOURCES = ${PROGRAMS:=.cpp}
+
+PARTS = motors servos sensors dispatcher
+PARTS_O = ${PARTS:=.o}
 
 
 all: ${PROGRAMS} tests
 
 
-${PROGRAMS}: ${SOURCES}
-	$(CXX) $(CFLAGS) -I$(RF_HEADER_DIR) -L$(RF_LIB_DIR) -l$(RF_LIB) $@.cpp -o $@
+#${PROGRAMS}: ${SOURCES}
+#	$(CXX) $(CFLAGS) -I$(RF_HEADER_DIR) -L$(RF_LIB_DIR) -l$(RF_LIB) $@.cpp -o $@
 
+hover-controller: $@ ${PARTS_O}
+	$(CXX) $(CFLAGS) -I$(RF_HEADER_DIR) -L$(RF_LIB_DIR) -l$(RF_LIB) -l$(GPIO_LIB) -lrt $@.cpp \
+	${PARTS_O} -o $@
+
+dispatcher.o: dispatcher.cpp
+	$(CXX) $(CFLAGS) dispatcher.cpp -o $@ -c
+
+servos.o: servos.cpp
+	$(CXX) $(CFLAGS) servos.cpp -o $@ -c
+
+motors.o: motors.cpp
+	$(CXX) $(CFLAGS) motors.cpp -o $@ -c
+
+sensors.o: sensors.cpp
+	$(CXX) $(CFLAGS) sensors.cpp -o $@ -c
 
 tests: 
 
 
-.PHONY: clean
+.PHONY: clean remake
 clean:
-	rm -rf $(PROGRAMS) *.o
+	rm -rf $(PROGRAMS) $(PARTS_O) *.o
+remake: clean all

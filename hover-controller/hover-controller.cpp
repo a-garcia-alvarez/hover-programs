@@ -14,6 +14,8 @@ TMRh20 2014
 
 #include "../rfudp/TxTunnel.h"
 
+#include "dispatcher.h"
+
 using namespace std;
 //
 // Hardware configuration
@@ -25,7 +27,8 @@ using namespace std;
 // See http://www.airspayce.com/mikem/bcm2835/group__constants.html#ga63c029bd6500167152db4e57736d0939 and the related enumerations for pin information.
 
 // Setup for GPIO 15 CE and CE0 CSN with SPI Speed @ 8Mhz
-RF24 radio(RPI_V2_GPIO_P1_15, RPI_V2_GPIO_P1_24, BCM2835_SPI_SPEED_32MHZ);
+//RF24 radio(RPI_V2_GPIO_P1_15, RPI_V2_GPIO_P1_24, BCM2835_SPI_SPEED_32MHZ);
+RF24 radio(RF_CE_PIN, RPI_V2_GPIO_P1_24, BCM2835_SPI_SPEED_32MHZ);
 
 
 // Radio pipe addresses for the 2 nodes to communicate. From "TxTunnel.h"
@@ -34,11 +37,11 @@ RF24 radio(RPI_V2_GPIO_P1_15, RPI_V2_GPIO_P1_24, BCM2835_SPI_SPEED_32MHZ);
 // loop condition
 sig_atomic_t loop_on = TRUE;
 
-void signal_handler(int sig){
+void signal_handler(int sig) {
   loop_on = FALSE;
 }
 
-int main(int argc, char** argv){
+int main(int argc, char** argv) {
 
 
     char buffer[MAX_MSG_SZ+1];
@@ -53,7 +56,7 @@ int main(int argc, char** argv){
     sigaction(SIGTERM, &sa, NULL);
 
 
-/* RF setup */
+    /* RF setup */
     radio.begin();                      // Setup and configure rf radio
     radio.powerUp();
     #ifdef RF_CHANNEL
@@ -69,7 +72,13 @@ int main(int argc, char** argv){
     radio.setRetries(2,10);                  // Optionally, increase the delay between retries & # of retries
     radio.setCRCLength(RF24_CRC_8);     // Use 8-bit CRC for performance
 
+    radio.printDetails();
 
+    /* GPIO setup */
+    if(gpioInitialise()<0) {
+        perror("[pigpio] gpioInitialise error");
+        exit(EXIT_FAILURE);
+    }
 
     // This opens two pipes for these two nodes to communicate
     // back and forth.
@@ -77,7 +86,7 @@ int main(int argc, char** argv){
     {
       radio.openWritingPipe(addresses[1]);
       radio.openReadingPipe(1,addresses[0]);
-	  radio.stopListening();
+      radio.stopListening();
     } else {
       radio.openWritingPipe(addresses[0]);
       radio.openReadingPipe(1,addresses[1]);
@@ -89,6 +98,8 @@ int main(int argc, char** argv){
     int n;
     uint8_t pipeNo;
     memset(buffer, 0, sizeof(buffer));
+
+    printf("Starting listenning for messages\n");
 
     do{
         // GET DATA FROM CLIENT
@@ -109,21 +120,24 @@ int main(int argc, char** argv){
 
 
         /* START process Part */
-
+        process_msg(buffer);
+        n = strlen(buffer);
 
         /* END process Part */
 
+        printf("ANS: \'%s\'\n", buffer);
+
         // Answer the client
-		#if ACK_MODE		//ACK MODE
+        #if ACK_MODE        //ACK MODE
         radio.writeAckPayload(pipeNo, buffer, n );
-		#else
-		radio.stopListening();
+        #else
+        radio.stopListening();
         if ( radio.write(buffer,n) )
-			printf("sending correct\n");
-		else
-			eprintf("error\n");
-		radio.startListening();
-		#endif
+            printf("sending correct\n");
+        else
+            eprintf("error\n");
+        radio.startListening();
+        #endif
 
 
 
@@ -132,6 +146,8 @@ int main(int argc, char** argv){
     // Power down the antenna
     eprintf("Powering down the antenna");
     radio.powerDown();
+    eprintf("Terminating PiGPIO");
+    gpioTerminate();
     eprintf("\n");
 }
 

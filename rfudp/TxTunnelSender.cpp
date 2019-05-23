@@ -56,7 +56,7 @@ int main(int argc, char** argv){
     sigaction(SIGTERM, &sa, NULL);
 
 
-/* UDP LISTENER setup */
+    /* UDP LISTENER setup */
 
     // Creating socket file descriptor
     if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) {
@@ -83,7 +83,8 @@ int main(int argc, char** argv){
     }
 
 
-/* RF setup */
+    /* RF setup */
+
     radio.begin();                      // Setup and configure rf radio
     radio.powerUp();
     #ifdef RF_CHANNEL
@@ -100,12 +101,12 @@ int main(int argc, char** argv){
     radio.setCRCLength(RF24_CRC_8);     // Use 8-bit CRC for performance
 
 
-/* Print setup details*/
+    /* Print setup details*/
     printf("================ UDP Configuration ================\n");
-    printf("SERVER IP	 = %s\n", inet_ntoa(servaddr.sin_addr));
-    printf("SERVER PORT	 = %i\n", ntohs(servaddr.sin_port));
-    printf("MSG MAX SIZE	 = %i\n", MAX_MSG_SZ);
-    printf("ACK MODE	 = %s\n", ACK_MODE? "true":"false");
+    printf("SERVER IP     = %s\n", inet_ntoa(servaddr.sin_addr));
+    printf("SERVER PORT     = %i\n", ntohs(servaddr.sin_port));
+    printf("MSG MAX SIZE     = %i\n", MAX_MSG_SZ);
+    printf("ACK MODE     = %s\n", ACK_MODE? "true":"false");
     radio.printDetails();
     printf("\n");
 
@@ -117,7 +118,7 @@ int main(int argc, char** argv){
     {
       radio.openWritingPipe(addresses[1]);
       radio.openReadingPipe(1,addresses[0]);
-	  radio.stopListening();
+      radio.stopListening();
     } else {
       radio.openWritingPipe(addresses[0]);
       radio.openReadingPipe(1,addresses[1]);
@@ -127,9 +128,9 @@ int main(int argc, char** argv){
 
     // 
     int n;
-	#if !ACK_MODE
-	unsigned long loop_start;
-	#endif
+    #if !ACK_MODE
+    unsigned long loop_start;
+    #endif
     unsigned int cliaddr_len = sizeof(cliaddr);
     memset(buffer, 0, sizeof(buffer));
 
@@ -157,7 +158,7 @@ int main(int argc, char** argv){
 
 
         /* START RF Part */
-		#if ACK_MODE
+      #if ACK_MODE
         if ( radio.write(buffer,n) ){
             //usleep(10000);
             if(!radio.available()){
@@ -171,28 +172,27 @@ int main(int argc, char** argv){
             // If no ack response, sending failed
             eprintf("Sending failed.\n\r");
             strcpy(buffer,"TxERR\0");
-        	n=strlen(buffer);
+            n=strlen(buffer);
         }
-		#else
-		radio.write(buffer,n);
+      #else
+        radio.write(buffer,n);
 
-		loop_start = millis();
-		radio.startListening();
-		while ( !radio.available() && (millis() - loop_start) < 100) {
-    	// Serial.println(F("waiting."));
-		}
-		if (millis() - loop_start >= 100) {
+        loop_start = millis();
+        radio.startListening();
+        while ( !radio.available() && (millis() - loop_start) < 100) {
+            // wait till receive or timeout
+        }
+        if (millis() - loop_start >= 100) {
             eprintf("Not Response.\n\r");
             strcpy(buffer,"TxERR\0");
-        	n=strlen(buffer);
-		} else {
-		  n = radio.getDynamicPayloadSize();
-		  radio.read(buffer, MAX_MSG_SZ);
-		}
-		radio.stopListening();
-		#endif
+            n=strlen(buffer);
+        } else {
+          n = radio.getDynamicPayloadSize();
+          radio.read(buffer, MAX_MSG_SZ);
+        }
+        radio.stopListening();
+      #endif
         buffer[n] = '\0';
-
         /* END RF Part */
 
         printf("ANS: \'%s\'\n", buffer);
