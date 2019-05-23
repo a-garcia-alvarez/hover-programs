@@ -35,7 +35,7 @@ all: ${PROGRAMS} tests
 #${PROGRAMS}: ${SOURCES}
 #	$(CXX) $(CFLAGS) -I$(RF_HEADER_DIR) -L$(RF_LIB_DIR) -l$(RF_LIB) $@.cpp -o $@
 
-hover-controller: $@ ${PARTS_O}
+hover-controller: hover-controller.cpp ${PARTS_O}
 	$(CXX) $(CFLAGS) -I$(RF_HEADER_DIR) -L$(RF_LIB_DIR) -l$(RF_LIB) -l$(GPIO_LIB) -lrt $@.cpp \
 	${SEN_PARTS} ${PARTS_O} -o $@
 
