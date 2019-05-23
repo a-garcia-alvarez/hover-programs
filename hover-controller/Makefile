@@ -26,6 +26,8 @@ SOURCES = ${PROGRAMS:=.cpp}
 PARTS = motors servos sensors dispatcher
 PARTS_O = ${PARTS:=.o}
 
+SEN_PARTS = sensors/temperature.o
+
 
 all: ${PROGRAMS} tests
 
@@ -35,7 +37,7 @@ all: ${PROGRAMS} tests
 
 hover-controller: $@ ${PARTS_O}
 	$(CXX) $(CFLAGS) -I$(RF_HEADER_DIR) -L$(RF_LIB_DIR) -l$(RF_LIB) -l$(GPIO_LIB) -lrt $@.cpp \
-	${PARTS_O} -o $@
+	${SEN_PARTS} ${PARTS_O} -o $@
 
 dispatcher.o: dispatcher.cpp
 	$(CXX) $(CFLAGS) dispatcher.cpp -o $@ -c
@@ -46,13 +48,16 @@ servos.o: servos.cpp
 motors.o: motors.cpp
 	$(CXX) $(CFLAGS) motors.cpp -o $@ -c
 
-sensors.o: sensors.cpp
+sensors.o: sensors.cpp ${SEN_PARTS}
 	$(CXX) $(CFLAGS) sensors.cpp -o $@ -c
+
+sensors/%.o: sensors/%.cpp
+	$(CXX) $(CFLAGS) $< -o $@ -c
 
 tests: 
 
 
 .PHONY: clean remake
 clean:
-	rm -rf $(PROGRAMS) $(PARTS_O) *.o
+	rm -rf $(PROGRAMS) $(PARTS_O) *.o sensors/*.o
 remake: clean all

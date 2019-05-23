@@ -18,7 +18,7 @@ void process_msg(char*msg) {
         servo_process(msg);
     } else
     if (strcmp(msg_cmd, "SEN") == 0) {
-        
+        sensor_process(msg);
     } else {
         eprintf("CMD not valid");
         strcpy(msg, "CMD_NOK");
