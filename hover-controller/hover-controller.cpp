@@ -78,6 +78,10 @@ int main(int argc, char** argv) {
     if(gpioInitialise()<0) {
         perror("[pigpio] gpioInitialise error");
         exit(EXIT_FAILURE);
+    }else{
+        servo_mv_r(MAIN_PROP_GPIO, 0);
+        servo_mv_r(LEFT_PROP_GPIO, 0);
+        servo_mv_r(RIGHT_PROP_GPIO, 0);
     }
 
     // This opens two pipes for these two nodes to communicate

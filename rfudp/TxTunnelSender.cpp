@@ -183,7 +183,7 @@ int main(int argc, char** argv){
 
         loop_start = millis();
         radio.startListening();
-        while ( !radio.available() && (millis() - loop_start) < 100) {
+        while ( !radio.available() && (millis() - loop_start) < 200) {
             // wait till receive or timeout
         }
         if (millis() - loop_start >= 100) {

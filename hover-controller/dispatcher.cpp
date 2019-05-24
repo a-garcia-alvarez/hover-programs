@@ -12,7 +12,7 @@ void process_msg(char*msg) {
 
 
     if (strcmp(msg_cmd, "ESC") == 0) {
-        
+        motor_process(msg);
     } else
     if (strcmp(msg_cmd, "SER") == 0) {
         servo_process(msg);
