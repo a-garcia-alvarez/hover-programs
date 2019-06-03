@@ -6,10 +6,10 @@ TMRh20 2014
  version 2 as published by the Free Software Foundation.
  */
 
-/** General Data Transfer Rate Test
- * This example demonstrates basic data transfer functionality with the
- updated library. This example will display the transfer rates acheived using
- the slower form of high-speed transfer using blocking-writes.
+/** TxTunnelSender
+ * This programm acts as a middle layer between clients and a nRF24 antenna.
+ * It sends to the other node what it receive on the udp socket and answer the sender
+ * with whatever the node sends back.
  */
 
 #include "TxTunnel.h"
@@ -183,10 +183,10 @@ int main(int argc, char** argv){
 
         loop_start = millis();
         radio.startListening();
-        while ( !radio.available() && (millis() - loop_start) < 200) {
+        while ( !radio.available() && (millis() - loop_start) < MILLIS_WAIT) {
             // wait till receive or timeout
         }
-        if (millis() - loop_start >= 100) {
+        if (millis() - loop_start >= MILLIS_WAIT) {
             eprintf("Not Response.\n\r");
             strcpy(buffer,"TxERR\0");
             n=strlen(buffer);
