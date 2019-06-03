@@ -103,16 +103,17 @@ void motor_process(char*msg){
         case ' ':
             if (lv < 500)
                 servo_mode = '%';
-            else
+            else {
                 servo_mode = 'R';
                 break;
+            }
         case '%':
             map_esc_per(pin, &lv);
             break;
         case 'R':
             break;
         default:
-            eprintf("[motors] mode not valid (%c)\n", *mode);
+            eprintf("[motors] mode not valid (%c)\n", *servo_mode);
             strcpy(msg, "ESC_MODE_NOK");
             return;
     }
