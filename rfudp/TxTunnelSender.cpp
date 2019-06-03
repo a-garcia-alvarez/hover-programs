@@ -103,10 +103,10 @@ int main(int argc, char** argv){
 
     /* Print setup details*/
     printf("================ UDP Configuration ================\n");
-    printf("SERVER IP     = %s\n", inet_ntoa(servaddr.sin_addr));
-    printf("SERVER PORT     = %i\n", ntohs(servaddr.sin_port));
-    printf("MSG MAX SIZE     = %i\n", MAX_MSG_SZ);
-    printf("ACK MODE     = %s\n", ACK_MODE? "true":"false");
+    printf("SERVER IP\t = %s\n", inet_ntoa(servaddr.sin_addr));
+    printf("SERVER PORT\t = %i\n", ntohs(servaddr.sin_port));
+    printf("MSG MAX SIZE\t = %i\n", MAX_MSG_SZ);
+    printf("ACK MODE\t = %s\n", ACK_MODE? "true":"false");
     radio.printDetails();
     printf("\n");
 
