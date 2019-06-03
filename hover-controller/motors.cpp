@@ -113,7 +113,7 @@ void motor_process(char*msg){
         case 'R':
             break;
         default:
-            eprintf("[motors] mode not valid (%c)\n", *servo_mode);
+            eprintf("[motors] mode not valid (%c)\n", servo_mode);
             strcpy(msg, "ESC_MODE_NOK");
             return;
     }
