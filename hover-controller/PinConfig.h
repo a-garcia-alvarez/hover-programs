@@ -27,8 +27,22 @@
 
 #define MAIN_PROP_GPIO      RPI_V2_GPIO_P1_13
 
-#define MAIN_PROP_START_PPM 1060
-#define MAIN_PROP_STOP_PPM  2400
+#define MAIN_PROP_START_PPM     1065
+#define MAIN_PROP_IDLE_PPM      1065
+#define MAIN_PROP_STOP_PPM      2400
+#define MAIN_PROP_MAX_PPM       2020
+
+#define LEFT_PROP_START_PPM     1065
+#define LEFT_PROP_IDLE_PPM      1065
+#define LEFT_PROP_STOP_PPM      2400
+#define LEFT_PROP_MAX_PPM       2020
+
+#define RIGHT_PROP_START_PPM    1065
+#define RIGHT_PROP_IDLE_PPM     1065
+#define RIGHT_PROP_STOP_PPM     2400
+#define RIGHT_PROP_MAX_PPM      2020
+
+#define ESC_WAIT_PPM        1005
 
 
 #endif // __PIN_CONFIG_H__

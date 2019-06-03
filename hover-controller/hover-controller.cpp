@@ -1,15 +1,16 @@
 /*
 TMRh20 2014
+Angel garcía 2019
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
  version 2 as published by the Free Software Foundation.
  */
 
-/** General Data Transfer Rate Test
- * This example demonstrates basic data transfer functionality with the
- updated library. This example will display the transfer rates acheived using
- the slower form of high-speed transfer using blocking-writes.
+/** Hover Controller
+ * This program manage all the RF communications and electronic elements
+ * communication.
+ * The code here manage rf intereactions and pass messages to the dispatcher.
  */
 
 #include "../rfudp/TxTunnel.h"
@@ -78,11 +79,12 @@ int main(int argc, char** argv) {
     if(gpioInitialise()<0) {
         perror("[pigpio] gpioInitialise error");
         exit(EXIT_FAILURE);
-    }else{
-        servo_mv_r(MAIN_PROP_GPIO, 0);
-        servo_mv_r(LEFT_PROP_GPIO, 0);
-        servo_mv_r(RIGHT_PROP_GPIO, 0);
     }
+    // initialize all motors
+    all_motors_zero();  // set PPM to 0
+    sleep(1);           // wait 1 sec
+    all_motors_stop();  // set PPM to stop
+
 
     // This opens two pipes for these two nodes to communicate
     // back and forth.
