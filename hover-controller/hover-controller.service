@@ -1,0 +1,14 @@
+[Unit]
+Description=Hover Controller
+After=syslog.target
+
+[Service]
+RestartSec=2s
+Type=simple
+User=root
+Group=root
+ExecStart=/home/pi/hover-programs/hover-controller/hover-controller
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,14 @@
+[Unit]
+Description=TxTunnelSender
+After=syslog.target
+
+[Service]
+RestartSec=2s
+Type=simple
+User=root
+Group=root
+ExecStart=/home/pi/hover-programs/rfudp/TxTunnelSender
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
