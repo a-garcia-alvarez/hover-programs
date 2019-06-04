@@ -29,19 +29,19 @@ void all_motors_start() {
 }
 
 int map_esc_per(unsigned int pin, int lv) {
-    int lv_new
+    int lv_new;
     switch(pin) {
         case MAIN_PROP_GPIO:
-            lv = map(*lv, 0, 100, MAIN_PROP_IDLE_PPM, MAIN_PROP_MAX_PPM);
-            blv_newreak;
+            lv_new = map(lv, 0, 100, MAIN_PROP_IDLE_PPM, MAIN_PROP_MAX_PPM);
+            break;
         case LEFT_PROP_GPIO:
-            lv_new = map(*lv, 0, 100, LEFT_PROP_IDLE_PPM, LEFT_PROP_MAX_PPM);
+            lv_new = map(lv, 0, 100, LEFT_PROP_IDLE_PPM, LEFT_PROP_MAX_PPM);
             break;
         case RIGHT_PROP_GPIO:
-            lv_new = map(*lv, 0, 100, RIGHT_PROP_IDLE_PPM, RIGHT_PROP_MAX_PPM);
+            lv_new = map(lv, 0, 100, RIGHT_PROP_IDLE_PPM, RIGHT_PROP_MAX_PPM);
             break;
         default:
-            lv_new = map(*lv, 0, 100, ESC_MIN, ESC_MAX);
+            lv_new = map(lv, 0, 100, ESC_MIN, ESC_MAX);
     }
     return lv_new;
 }
@@ -117,9 +117,10 @@ void motor_process(char*msg){
     if (servo_index == 'R')
         pin = RIGHT_PROP_GPIO;
     else
-    if (servo_index == 'P')
-        advance_both(&msg, &lv, offset);
+    if (servo_index == 'P') {
+        advance_both(msg, &lv, offset);
         return;
+    }
     else {
         eprintf("[motors] index not valid (%c)\n", servo_index);
         strcpy(msg, "ESC_INDX_NOK");
