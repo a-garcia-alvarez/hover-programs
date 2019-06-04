@@ -53,9 +53,9 @@ void advance_both(char*msg, int *lv, int offset){
     eprintf("lv: %i,\tlv_r:%i\t,lv_l:%i\n", *lv, lv_r, lv_l);
 
     // offset values if necesary
-    if( offset < 50)
-        lv_r = lv_r - offset_base;
     if( offset > 50)
+        lv_r = lv_r - offset_base;
+    if( offset < 50)
         lv_l = lv_l - offset_base;
     eprintf("lv: %i,\tlv_r:%i\t,lv_l:%i\n", *lv, lv_r, lv_l);
 
