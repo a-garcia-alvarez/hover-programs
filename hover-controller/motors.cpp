@@ -108,6 +108,11 @@ void motor_process(char*msg){
         sscanf(&msg[6], " %i %i", &lv, &offset );
     }
 
+    if (!started){
+        strcpy(msg, "ESC_STOPPED");
+        return;
+    }
+
     if (servo_index == 'M')
         pin = MAIN_PROP_GPIO;
     else
