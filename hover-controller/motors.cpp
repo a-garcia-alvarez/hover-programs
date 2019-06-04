@@ -28,27 +28,50 @@ void all_motors_start() {
     servo_mv_r(RIGHT_PROP_GPIO, RIGHT_PROP_START_PPM);
 }
 
-int map_esc_per(unsigned int pin, int *lv) {
+int map_esc_per(unsigned int pin, int lv) {
+    int lv_new
     switch(pin) {
         case MAIN_PROP_GPIO:
-            *lv = map(*lv, 0, 100, MAIN_PROP_IDLE_PPM, MAIN_PROP_MAX_PPM);
-            break;
+            lv = map(*lv, 0, 100, MAIN_PROP_IDLE_PPM, MAIN_PROP_MAX_PPM);
+            blv_newreak;
         case LEFT_PROP_GPIO:
-            *lv = map(*lv, 0, 100, LEFT_PROP_IDLE_PPM, LEFT_PROP_MAX_PPM);
+            lv_new = map(*lv, 0, 100, LEFT_PROP_IDLE_PPM, LEFT_PROP_MAX_PPM);
             break;
         case RIGHT_PROP_GPIO:
-            *lv = map(*lv, 0, 100, RIGHT_PROP_IDLE_PPM, RIGHT_PROP_MAX_PPM);
+            lv_new = map(*lv, 0, 100, RIGHT_PROP_IDLE_PPM, RIGHT_PROP_MAX_PPM);
             break;
         default:
-            *lv = map(*lv, 0, 100, ESC_MIN, ESC_MAX);
+            lv_new = map(*lv, 0, 100, ESC_MIN, ESC_MAX);
     }
-    return *lv;
+    return lv_new;
+}
+void advance_both(char*msg, int *lv, int offset){
+    int lv_r, lv_l;
+    int offset_base = *lv/4;    //get offset to ajust 
+
+    lv_r = lv_l = *lv;      // asign base level
+    eprintf("lv: %i,\tlv_r:%i\t,lv_l:%i\n", *lv, lv_r, lv_l);
+
+    // offset values if necesary
+    if( offset < 50)
+        lv_r = lv_r - offset_base;
+    if( offset < 50)
+        lv_l = lv_l - offset_base;
+    eprintf("lv: %i,\tlv_r:%i\t,lv_l:%i\n", *lv, lv_r, lv_l);
+
+    // map to real values
+    lv_r = map_esc_per(RIGHT_PROP_GPIO, lv_r);
+    lv_l = map_esc_per(LEFT_PROP_GPIO,  lv_l);
+
+    // ajust motor speed
+    servo_mv_r(RIGHT_PROP_GPIO, lv_r);
+    servo_mv_r(LEFT_PROP_GPIO,  lv_l);
 }
 
 void motor_process(char*msg){
     char servo_index = msg[4];
     char servo_mode  = msg[5];
-    int lv;
+    int lv, offset;
     char action[5];
     unsigned int pin;
 
@@ -82,7 +105,7 @@ void motor_process(char*msg){
         strcpy(msg, "ESC_STOPPED");
         return;
     } else {
-        sscanf(&msg[6], " %i ", &lv );
+        sscanf(&msg[6], " %i %i", &lv, &offset );
     }
 
     if (servo_index == 'M')
@@ -93,6 +116,10 @@ void motor_process(char*msg){
     else
     if (servo_index == 'R')
         pin = RIGHT_PROP_GPIO;
+    else
+    if (servo_index == 'P')
+        advance_both(&msg, &lv, offset);
+        return;
     else {
         eprintf("[motors] index not valid (%c)\n", servo_index);
         strcpy(msg, "ESC_INDX_NOK");
@@ -108,7 +135,7 @@ void motor_process(char*msg){
                 break;
             }
         case '%':
-            map_esc_per(pin, &lv);
+            lv = map_esc_per(pin, lv);
             break;
         case 'R':
             break;
