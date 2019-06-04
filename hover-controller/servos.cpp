@@ -52,8 +52,8 @@ int map_ser_per( int lv){
     lv_r = map(lv, 0, 100, RIGHT_RUDDER_MIN, RIGHT_RUDDER_MAX);
     lv_l = map(lv, 0, 100, LEFT_RUDDER_MIN,  LEFT_RUDDER_MAX);
     
-    servo_mv_r(RIGHT_RUDDER_GPIO,   &lv_r);
-    servo_mv_r(LEFT_RUDDER_GPIO,    &lv_l);
+    servo_mv_r(RIGHT_RUDDER_GPIO,   lv_r);
+    servo_mv_r(LEFT_RUDDER_GPIO,    lv_l);
 }
 
 void servo_process(char*msg) {
