@@ -25,7 +25,8 @@ using namespace std;
 // See http://www.airspayce.com/mikem/bcm2835/group__constants.html#ga63c029bd6500167152db4e57736d0939 and the related enumerations for pin information.
 
 // Setup for GPIO 15 CE and CE0 CSN with SPI Speed @ 8Mhz
-RF24 radio(RPI_V2_GPIO_P1_15, RPI_V2_GPIO_P1_24, BCM2835_SPI_SPEED_32MHZ);
+//RF24 radio(RPI_V2_GPIO_P1_15, RPI_V2_GPIO_P1_24, BCM2835_SPI_SPEED_32MHZ);
+RF24 radio(RPI_V2_GPIO_P1_22, RPI_V2_GPIO_P1_24, BCM2835_SPI_SPEED_32MHZ);
 
 
 // Radio pipe addresses for the 2 nodes to communicate. From "TxTunnel.h"
