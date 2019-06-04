@@ -47,6 +47,15 @@ void servo_mv(char*msg, char* mode, unsigned int pin, int *lv) {
 
 }
 
+int map_ser_per( int lv){
+    int lv_r, lv_l;
+    lv_r = map(lv, 0, 100, RIGHT_RUDDER_MIN, RIGHT_RUDDER_MAX);
+    lv_l = map(lv, 0, 100, LEFT_RUDDER_MIN,  LEFT_RUDDER_MAX);
+    
+    servo_mv(msg, &servo_mode, RIGHT_RUDDER_GPIO, &lv_r);
+    servo_mv(msg, &servo_mode, LEFT_RUDDER_GPIO, &lv_l);
+}
+
 void servo_process(char*msg) {
     char servo_index = msg[4];
     char servo_mode  = msg[5];
@@ -59,6 +68,9 @@ void servo_process(char*msg) {
     } else
     if (servo_index == 'R') {
         servo_mv(msg, &servo_mode, RIGHT_RUDDER_GPIO, &lv);
+    } else
+    if (servo_index == 'P') {
+        map_ser_per(lv);
     } else {
         eprintf("[servos] index not valid (%c)\n", servo_index);
         strcpy(msg, "SER_INDX_NOK");

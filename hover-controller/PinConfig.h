@@ -10,12 +10,12 @@
 #define SERVO_MIN   500
 
 #define LEFT_RUDDER_GPIO    23
-#define LEFT_RUDDER_MAX     SERVO_MAX
-#define LEFT_RUDDER_MIN     SERVO_MIN
+#define LEFT_RUDDER_MAX     1735
+#define LEFT_RUDDER_MIN     785
 
 #define RIGHT_RUDDER_GPIO   24
-#define RIGHT_RUDDER_MAX    SERVO_MAX
-#define RIGHT_RUDDER_MIN    SERVO_MIN
+#define RIGHT_RUDDER_MAX    2115
+#define RIGHT_RUDDER_MIN    880
 
 // ESC pins & config
 #define ESC_MAX     2020
