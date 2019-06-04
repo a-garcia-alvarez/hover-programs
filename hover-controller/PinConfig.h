@@ -22,8 +22,8 @@
 #define ESC_MIN     1000
 #define ESC_REVERSE 
 
-#define RIGHT_PROP_GPIO     RPI_V2_GPIO_P1_11
-#define LEFT_PROP_GPIO      RPI_V2_GPIO_P1_15
+#define RIGHT_PROP_GPIO     RPI_V2_GPIO_P1_15
+#define LEFT_PROP_GPIO      RPI_V2_GPIO_P1_11
 
 #define MAIN_PROP_GPIO      RPI_V2_GPIO_P1_13
 
@@ -33,14 +33,14 @@
 #define MAIN_PROP_MAX_PPM       2020
 
 #define LEFT_PROP_START_PPM     1065
-#define LEFT_PROP_IDLE_PPM      1065
+#define LEFT_PROP_IDLE_PPM      1015
 #define LEFT_PROP_STOP_PPM      2400
-#define LEFT_PROP_MAX_PPM       2020
+#define LEFT_PROP_MAX_PPM       2000
 
 #define RIGHT_PROP_START_PPM    1065
-#define RIGHT_PROP_IDLE_PPM     1065
+#define RIGHT_PROP_IDLE_PPM     1025
 #define RIGHT_PROP_STOP_PPM     2400
-#define RIGHT_PROP_MAX_PPM      2020
+#define RIGHT_PROP_MAX_PPM      2000
 
 #define ESC_WAIT_PPM        1005
 
